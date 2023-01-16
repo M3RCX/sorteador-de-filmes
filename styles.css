@@ -269,7 +269,6 @@ body{
 .movieDetails{
     display: flex;
     flex-direction: row;
-<<<<<<< HEAD
 }
 
 .provider{
@@ -279,6 +278,4 @@ body{
 .movie-provider-img img{
     width: 50px;
     margin-top: 8px;
-=======
->>>>>>> 642aa4ff8a50cb1f2da9ca55149473ee25133259
 }
