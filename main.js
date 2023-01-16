@@ -1,10 +1,12 @@
 import { API_KEY, BASE_URL, IMG_URL, language } from "./api.js";
 
-$(".seriesOptions").on("click", function () {
-  if ($(".seriesOptions").hasClass("active")) {
-    $(".seriesOptions").removeClass("active");
-  } else {
-    $(".seriesOptions").addClass("active");
+
+$('.onoffbtn').on('click', function(){
+  if($(this).children().is(':checked')){
+    $(this).addClass('active');
+  }
+  else{
+    $(this).removeClass('active')
   }
 });
 
@@ -16,7 +18,7 @@ $(".button-container").on("click", function () {
   var page = Math.floor(Math.random() * 501 + 1);
   var categorieId = Math.floor(Math.random() * 20 + 1);
 
-  if ($(".seriesOptions").hasClass("active")) {
+  if ($(".onoffbtn").hasClass("active")) {
     
     var page = Math.floor(Math.random() * 17 + 1);
 
