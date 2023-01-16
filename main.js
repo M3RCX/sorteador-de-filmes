@@ -1,57 +1,84 @@
 import { API_KEY, BASE_URL, IMG_URL, language } from "./api.js";
 
+$(".seriesOptions").on("click", function () {
+  if ($(".seriesOptions").hasClass("active")) {
+    $(".seriesOptions").removeClass("active");
+  } else {
+    $(".seriesOptions").addClass("active");
+  }
+});
+
 $(".button-container").on("click", function () {
   $(".movie-title h2").remove();
   $(".movie-description p").remove();
   $(".movie-img img").remove();
-  var i = 0
-  var page = Math.floor(Math.random() * 501);
-  var categorieId = Math.floor(Math.random() * 20);
-  $.ajax({
-    type: "GET",
-    url: `https://api.themoviedb.org/3/discover/movie?api_key=ce20ac06fb3262b6ef00dd5c451648f1&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_watch_monetization_types=flatrate`,
-    accept: "application/json",
-    contentType: "application/json",
-    dataType: "json",
-    success: function (response) {
+  var i = 0;
+  var page = Math.floor(Math.random() * 501 + 1);
+  var categorieId = Math.floor(Math.random() * 20 + 1);
 
-      console.log(categorieId);
-      console.log(response);
-      console.log(response.results);
+  if ($(".seriesOptions").hasClass("active")) {
+    
+    var page = Math.floor(Math.random() * 17 + 1);
 
-      i = response.results[categorieId]
-      console.log(i);
+    $.ajax({
+      type: "GET",
+      url: `https://api.themoviedb.org/3/discover/tv?api_key=ce20ac06fb3262b6ef00dd5c451648f1&language=pt-BR&sort_by=popularity.desc&page=${page}&include_null_first_air_dates=false&watch_region=BR&with_watch_monetization_types=flatrate&with_status=0&with_type=0`,
+      accept: "application/json",
+      contentType: "application/json",
+      dataType: "json",
+      success: function (response) {
+        console.log(categorieId);
+        console.log(response);
+        console.log(response.results);
 
+        i = response.results[categorieId];
+        console.log(i);
 
-    var movieTitle = response.results[categorieId].title;
-    var movieDescription = response.results[categorieId].overview;
-    var movieImg = response.results[categorieId].poster_path;
+        var movieTitle = response.results[categorieId].name;
+        var movieDescription = response.results[categorieId].overview;
+        var movieImg = response.results[categorieId].poster_path;
 
-    $('.movie-img').append(`<img src='${IMG_URL}${movieImg}' />`);
-    $('.movie-title').append('<h2>'+movieTitle+'</h2>');
-    $('.movie-description').append('<p>'+movieDescription+'</p>');
+        $(".movie-img").append(`<img src='${IMG_URL}${movieImg}' />`);
+        $(".movie-title").append("<h2>" + movieTitle + "</h2>");
+        $(".movie-description").append("<p>" + movieDescription + "</p>");
+      },
+      error: function () {
+        $(".movie-title").append(
+          "<h2>Nenhum filme encontrado tente denovo</h2>"
+        );
+      },
+    });
+  } else {
+    $.ajax({
+      type: "GET",
+      url: `https://api.themoviedb.org/3/discover/movie?api_key=ce20ac06fb3262b6ef00dd5c451648f1&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&watch_region=BR&with_watch_monetization_types=flatrate`,
+      accept: "application/json",
+      contentType: "application/json",
+      dataType: "json",
+      success: function (response) {
+        console.log(categorieId);
+        console.log(response);
+        console.log(response.results);
 
-      
+        i = response.results[categorieId];
+        console.log(i);
 
-    },
-    error: function () {
-      $(".movie-title").append("<h2>Nenhum filme encontrado tente denovo</h2>");
-    },
-  });
+        var movieTitle = response.results[categorieId].title;
+        var movieDescription = response.results[categorieId].overview;
+        var movieImg = response.results[categorieId].poster_path;
+
+        $(".movie-img").append(`<img src='${IMG_URL}${movieImg}' />`);
+        $(".movie-title").append("<h2>" + movieTitle + "</h2>");
+        $(".movie-description").append("<p>" + movieDescription + "</p>");
+      },
+      error: function () {
+        $(".movie-title").append(
+          "<h2>Nenhum filme encontrado tente denovo</h2>"
+        );
+      },
+    });
+  }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // $.ajax({
 //   type: 'GET',
