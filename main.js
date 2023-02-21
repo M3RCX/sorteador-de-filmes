@@ -1,5 +1,4 @@
 import { API_KEY, IMG_URL} from "./api.js";
-const IMG_URL = "https://image.tmdb.org/t/p/w500";
 
 const loadMovie = async (isTV) => {
   try {
