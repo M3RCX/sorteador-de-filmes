@@ -21,7 +21,7 @@ const loadMovie = async (isTV) => {
 };
 
 const getMovieResults = async (isTV) => {
-  const response = await fetch(`https://api.themoviedb.org/3/discover/${isTV ? "tv" : "movie"}?${API_KEY}&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${getRandomInt(500) + 1}&watch_region=BR&with_watch_monetization_types=flatrate`, {
+  const response = await fetch(`https://api.themoviedb.org/3/discover/${isTV ? "tv" : "movie"}${API_KEY}&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${getRandomInt(500) + 1}&watch_region=BR&with_watch_monetization_types=flatrate`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -35,7 +35,7 @@ const getMovieResults = async (isTV) => {
 };
 
 const getMovieProviders = async (id, isTV) => {
-  const response = await fetch(`https://api.themoviedb.org/3/${isTV ? "tv" : "movie"}/${id}/watch/providers?${API_KEY}`, {
+  const response = await fetch(`https://api.themoviedb.org/3/${isTV ? "tv" : "movie"}/${id}/watch/providers${API_KEY}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -53,12 +53,16 @@ const getRandomInt = (max) => {
 };
 
 const clearMovie = () => {
-  document.querySelector(".movie-title h2").remove();
-  document.querySelector(".movie-description p").remove();
-  document.querySelector(".movie-img img").remove();
-  document.querySelector(".movie-provider p").remove();
-  document.querySelector(".movie-provider-img img").remove();
+  const teste = document.querySelector(".movie-title") ;
+  if (teste.length > 0 ) {
+    document.querySelector(".movie-title h2").remove();
+    document.querySelector(".movie-description p").remove();
+    document.querySelector(".movie-img img").remove();
+    document.querySelector(".movie-provider p").remove();
+    document.querySelector(".movie-provider-img img").remove();
+  };
 };
+
 
 document.querySelector('.onoffbtn').addEventListener('click', function () {
   this.classList.toggle('active');
@@ -67,5 +71,16 @@ document.querySelector('.onoffbtn').addEventListener('click', function () {
 document.querySelector(".button-container").addEventListener("click", function () {
   const isTV = document.querySelector(".onoffbtn").classList.contains("active");
   loadMovie(isTV);
+});
+
+const onoffbtn = document.querySelector('.onoffbtn');
+
+onoffbtn.addEventListener('click', function() {
+  const checkbox = this.querySelector('input[type="checkbox"]');
+  if (checkbox.checked) {
+    this.classList.add('active');
+  } else {
+    this.classList.remove('active');
+  }
 });
 
