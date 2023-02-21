@@ -1,4 +1,4 @@
-import { API_KEY, IMG_URL} from "./api.js";
+import { API_KEY, IMG_URL } from "./api.js";
 
 const loadMovie = async (isTV) => {
   try {
@@ -9,39 +9,41 @@ const loadMovie = async (isTV) => {
 
     clearMovie();
 
-    $(".movie-img").append(`<img src='${imgSrc}' />`);
-    $(".movie-title").append(`<h2>${isTV ? name : title}</h2>`);
-    $(".movie-description").append(`<p>${overview}</p>`);
-    $(".movie-provider-img").append(`<img src='${IMG_URL}${logo_path}' />`);
-    $(".movie-provider").append(`<p class='text-n'>${provider_name}</p>`);
+    document.querySelector(".movie-img").innerHTML = `<img src='${imgSrc}' />`;
+    document.querySelector(".movie-title").innerHTML = `<h2>${isTV ? name : title}</h2>`;
+    document.querySelector(".movie-description").innerHTML = `<p>${overview}</p>`;
+    document.querySelector(".movie-provider-img").innerHTML = `<img src='${IMG_URL}${logo_path}' />`;
+    document.querySelector(".movie-provider").innerHTML = `<p class='text-n'>${provider_name}</p>`;
   } catch (error) {
     clearMovie();
-    $(".movie-title").append("<h2>Nenhum filme encontrado, tente novamente.</h2>");
+    document.querySelector(".movie-title").innerHTML = "<h2>Nenhum filme encontrado, tente novamente.</h2>";
   }
 };
 
 const getMovieResults = async (isTV) => {
-  const response = await $.ajax({
-    type: "GET",
-    url: `https://api.themoviedb.org/3/discover/${isTV ? "tv" : "movie"}?${API_KEY}&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${getRandomInt(500) + 1}&watch_region=BR&with_watch_monetization_types=flatrate`,
-    accept: "application/json",
-    contentType: "application/json",
-    dataType: "json",
+  const response = await fetch(`https://api.themoviedb.org/3/discover/${isTV ? "tv" : "movie"}?${API_KEY}&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${getRandomInt(500) + 1}&watch_region=BR&with_watch_monetization_types=flatrate`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
   });
+  const data = await response.json();
   const categorieId = getRandomInt(20);
-  const movieResult = response.results[categorieId];
+  const movieResult = data.results[categorieId];
   return [movieResult, categorieId];
 };
 
 const getMovieProviders = async (id, isTV) => {
-  const response = await $.ajax({
-    type: "GET",
-    url: `https://api.themoviedb.org/3/${isTV ? "tv" : "movie"}/${id}/watch/providers?${API_KEY}`,
-    accept: "application/json",
-    contentType: "application/json",
-    dataType: "json",
+  const response = await fetch(`https://api.themoviedb.org/3/${isTV ? "tv" : "movie"}/${id}/watch/providers?${API_KEY}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
   });
-  const { flatrate } = response.results.BR;
+  const data = await response.json();
+  const { flatrate } = data.results.BR;
   const { logo_path, provider_name } = flatrate[0];
   return { logo_path, provider_name };
 };
@@ -51,19 +53,19 @@ const getRandomInt = (max) => {
 };
 
 const clearMovie = () => {
-  $(".movie-title h2").remove();
-  $(".movie-description p").remove();
-  $(".movie-img img").remove();
-  $(".movie-provider p").remove();
-  $(".movie-provider-img img").remove();
+  document.querySelector(".movie-title h2").remove();
+  document.querySelector(".movie-description p").remove();
+  document.querySelector(".movie-img img").remove();
+  document.querySelector(".movie-provider p").remove();
+  document.querySelector(".movie-provider-img img").remove();
 };
 
-$('.onoffbtn').on('click', function () {
-  $(this).toggleClass('active');
+document.querySelector('.onoffbtn').addEventListener('click', function () {
+  this.classList.toggle('active');
 });
 
-$(".button-container").on("click", function () {
-  const isTV = $(".onoffbtn").hasClass("active");
+document.querySelector(".button-container").addEventListener("click", function () {
+  const isTV = document.querySelector(".onoffbtn").classList.contains("active");
   loadMovie(isTV);
 });
 
