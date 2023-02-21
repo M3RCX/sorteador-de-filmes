@@ -1,155 +1,70 @@
-import { API_KEY, BASE_URL, IMG_URL, language } from "./api.js";
+import { API_KEY, IMG_URL} from "./api.js";
+const IMG_URL = "https://image.tmdb.org/t/p/w500";
 
+const loadMovie = async (isTV) => {
+  try {
+    const [movieResult, categorieId] = await getMovieResults(isTV);
+    const { title, name, overview, poster_path, id } = movieResult;
+    const imgSrc = IMG_URL + poster_path;
+    const { logo_path, provider_name } = await getMovieProviders(id, isTV);
 
-$('.onoffbtn').on('click', function(){
-  if($(this).children().is(':checked')){
-    $(this).addClass('active');
+    clearMovie();
+
+    $(".movie-img").append(`<img src='${imgSrc}' />`);
+    $(".movie-title").append(`<h2>${isTV ? name : title}</h2>`);
+    $(".movie-description").append(`<p>${overview}</p>`);
+    $(".movie-provider-img").append(`<img src='${IMG_URL}${logo_path}' />`);
+    $(".movie-provider").append(`<p class='text-n'>${provider_name}</p>`);
+  } catch (error) {
+    clearMovie();
+    $(".movie-title").append("<h2>Nenhum filme encontrado, tente novamente.</h2>");
   }
-  else{
-    $(this).removeClass('active')
-  }
-});
+};
 
-$(".button-container").on("click", function () {
+const getMovieResults = async (isTV) => {
+  const response = await $.ajax({
+    type: "GET",
+    url: `https://api.themoviedb.org/3/discover/${isTV ? "tv" : "movie"}?${API_KEY}&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${getRandomInt(500) + 1}&watch_region=BR&with_watch_monetization_types=flatrate`,
+    accept: "application/json",
+    contentType: "application/json",
+    dataType: "json",
+  });
+  const categorieId = getRandomInt(20);
+  const movieResult = response.results[categorieId];
+  return [movieResult, categorieId];
+};
+
+const getMovieProviders = async (id, isTV) => {
+  const response = await $.ajax({
+    type: "GET",
+    url: `https://api.themoviedb.org/3/${isTV ? "tv" : "movie"}/${id}/watch/providers?${API_KEY}`,
+    accept: "application/json",
+    contentType: "application/json",
+    dataType: "json",
+  });
+  const { flatrate } = response.results.BR;
+  const { logo_path, provider_name } = flatrate[0];
+  return { logo_path, provider_name };
+};
+
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+};
+
+const clearMovie = () => {
   $(".movie-title h2").remove();
   $(".movie-description p").remove();
   $(".movie-img img").remove();
   $(".movie-provider p").remove();
   $(".movie-provider-img img").remove();
+};
 
-  var i = 0;
-  var page = Math.floor(Math.random() * 501 + 1);
-  // var categorieId = 1;
-  var categorieId = Math.floor(Math.random() * 20 + 0);
-
-  if ($(".onoffbtn").hasClass("active")) {
-    
-    var page = Math.floor(Math.random() * 17 + 1);
-
-    $.ajax({
-      type: "GET",
-      url: `https://api.themoviedb.org/3/discover/tv?api_key=ce20ac06fb3262b6ef00dd5c451648f1&language=pt-BR&sort_by=popularity.desc&page=${page}&include_null_first_air_dates=false&watch_region=BR&with_watch_monetization_types=flatrate&with_status=0&with_type=0`,
-      accept: "application/json",
-      contentType: "application/json",
-      dataType: "json",
-      success: function (response) {
-        console.log(categorieId);
-        console.log(response);
-        console.log(response.results);
-
-        i = response.results[categorieId];
-        console.log(i);
-
-        var movieTitle = response.results[categorieId].name;
-        var movieDescription = response.results[categorieId].overview;
-        var movieImg = response.results[categorieId].poster_path;
-        var tvId = response.results[categorieId].id;
-
-        console.log(tvId);
-
-
-        $.ajax({
-          type: "GET",
-          url: `https://api.themoviedb.org/3/tv/${tvId}/watch/providers?api_key=ce20ac06fb3262b6ef00dd5c451648f1`,
-          accept: "application/json",
-          contentType: "application/json",
-          dataType: "json",
-          success: function (response) {
-            console.log(response);
-            var tvProvider = response.results.BR.flatrate[0];
-            console.log(tvProvider);
-            var providerLogo = response.results.BR.flatrate[0].logo_path;
-            var providerName = response.results.BR.flatrate[0].provider_name;
-
-
-            $(".movie-provider-img").append(`<img src='${IMG_URL}${providerLogo}' />`);
-            $(".movie-provider").append("<p class='text-n'>" + providerName + "</p>");
-
-          }
-        });
-        $(".movie-img").append(`<img src='${IMG_URL}${movieImg}' />`);
-        $(".movie-title").append("<h2>" + movieTitle + "</h2>");
-        $(".movie-description").append("<p>" + movieDescription + "</p>");
-      },
-      error: function () {
-        $(".movie-title").append(
-          "<h2>Nenhum filme encontrado tente denovo</h2>"
-        );
-      },
-    });
-  } else {
-    $.ajax({
-      type: "GET",
-      url: `https://api.themoviedb.org/3/discover/movie?api_key=ce20ac06fb3262b6ef00dd5c451648f1&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&watch_region=BR&with_watch_monetization_types=flatrate`,
-      accept: "application/json",
-      contentType: "application/json",
-      dataType: "json",
-      success: function (response) {
-        console.log(categorieId);
-        console.log(response);
-        console.log(response.results);
-
-        i = response.results[categorieId];
-        console.log(i);
-
-        var movieTitle = response.results[categorieId].title;
-        var movieDescription = response.results[categorieId].overview;
-        var movieImg = response.results[categorieId].poster_path;
-        var movieId = response.results[categorieId].id;
-
-
-
-        $.ajax({
-          type: "GET",
-          url: `https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=ce20ac06fb3262b6ef00dd5c451648f1`,
-          accept: "application/json",
-          contentType: "application/json",
-          dataType: "json",
-          success: function (response) {
-            console.log(response);
-            var tvProvider = response.results.BR.flatrate[0];
-            console.log(tvProvider);
-            var providerLogo = response.results.BR.flatrate[0].logo_path;
-            var providerName = response.results.BR.flatrate[0].provider_name;
-
-
-            $(".movie-provider-img").append(`<img src='${IMG_URL}${providerLogo}' />`);
-            $(".movie-provider").append("<p class='text-n'>" + providerName + "</p>");
-
-          }
-        });
-
-
-        $(".movie-img").append(`<img src='${IMG_URL}${movieImg}' />`);
-        $(".movie-title").append("<h2>" + movieTitle + "</h2>");
-        $(".movie-description").append("<p>" + movieDescription + "</p>");
-      },
-      error: function () {
-        $(".movie-title").append(
-          "<h2>Nenhum filme encontrado tente denovo</h2>"
-        );
-      },
-    });
-  }
+$('.onoffbtn').on('click', function () {
+  $(this).toggleClass('active');
 });
 
-// $.ajax({
-//   type: 'GET',
-//   url: 'https://api.themoviedb.org/3/movie/' + movieId + API_KEY + language,
-//   accept: 'application/json',
-//   contentType: 'application/json',
-//   dataType: 'json',
-//   success: function(response) {
-//     var movieTitle = response.title;
-//     var movieDescription = response.overview;
-//     var movieImg = response.poster_path;
+$(".button-container").on("click", function () {
+  const isTV = $(".onoffbtn").hasClass("active");
+  loadMovie(isTV);
+});
 
-//     $('.movie-img').append(`<img src='${IMG_URL}${movieImg}' />`);
-//     $('.movie-title').append('<h2>'+movieTitle+'</h2>');
-//     $('.movie-description').append('<p>'+movieDescription+'</p>');
-
-//   },
-//   error: function(){
-//     $('.movie-title').append('<h2>Nenhum filme encontrado tente denovo</h2>');
-//   }
-// });
