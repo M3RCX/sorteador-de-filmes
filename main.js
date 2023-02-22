@@ -8,10 +8,10 @@ const loadMovie = async (isTV, page) => {
     const { logo_path, provider_name } = await getMovieProviders(id, isTV); 
     clearMovie();
 
-    document.querySelector(".movie-img").innerHTML = `<img src='${imgSrc}' />`;
-    document.querySelector(".movie-title").innerHTML = `<h2>${isTV ? name : title}</h2>`;
-    document.querySelector(".movie-description").innerHTML = `<p>${overview}</p>`;
-    document.querySelector(".movie-provider-img").innerHTML = `<img src='${IMG_URL}${logo_path}' />`;
+    document.querySelector(".movie-img").innerHTML = `<img class="img-fluid rounded-start" src='${imgSrc}' />`;
+    document.querySelector(".movie-title").innerHTML = `<h2 class="card-title">${isTV ? name : title}</h2>`;
+    document.querySelector(".movie-description").innerHTML = `<p class="card-text">${overview}</p>`;
+    document.querySelector(".movie-provider-img").innerHTML = `<img class="img-fluid rounded-start" src='${IMG_URL}${logo_path}' />`;
     document.querySelector(".movie-provider").innerHTML = `<p class='text-n'>${provider_name}</p>`;
   } catch (error) {
     clearMovie();

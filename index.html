@@ -36,7 +36,7 @@
   </head>
 
   <body>
-    <div class="main">
+    <div class="main container-sm">
       <div class="title-container">
         <a class="logo-title"><img src="./assets/shuffle.svg" /></a>
         <h1 class="title-content">Não sabe o que assistir?</h1>
@@ -45,18 +45,20 @@
         <p class="text-n">serie?</p>
         <label class="onoffbtn"><input type="checkbox" /></label>
       </div>
-      <div class="movie-container">
-        <div class="movieDetails">
-          <div class="teste">
+      <div class="movie-container card mb-3">
+        <div class="movieDetails row g-0">
+          <div class="teste col-md-4">
             <div class="movie-img"></div>
             <div class="provider">
               <div class="movie-provider"></div>
               <div class="movie-provider-img"></div>
             </div>
           </div>
-          <div class="movie">
-            <div class="movie-title"><h2></h2></div>
-            <div class="movie-description"><p></p></div>
+          <div class="movie col-md-7">
+            <div class="card-body">
+              <div class="movie-title"><h2 class="card-title"></h2></div>
+              <div class="movie-description"><p class="card-text"></p></div>
+            </div>
           </div>
         </div>
       </div>

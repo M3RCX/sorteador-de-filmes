@@ -6,7 +6,7 @@
 }
 body{
     background: var(--background) no-repeat center;
-    background-size: cover;
+    background-attachment: fixed;
 }
 
 .main{
@@ -97,20 +97,14 @@ body{
     font-weight: 400;
     font-size: 16px;
     color: #FFFCF9;
+    margin-top: 15px;
 }
 
-.movie-container .movie-title {
-   width: 423px; 
-}
 
-.movie-container .movie-description {
-   width: 423px; 
-    
-}
 
-.movie-img img{
+/* .movie-img img{
     width: 200px;
-}
+} */
 
 .movie{
     margin-left: 25px;
@@ -213,16 +207,34 @@ body{
     font-size: 20px;
 }
 
-.movieDetails{
+/* .movieDetails{
     display: flex;
     flex-direction: row;
-}
+} */
 
 .provider{
     margin-top: 15px;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .movie-provider-img img{
-    width: 50px;
+    width: 80px;
     margin-top: 8px;
+}
+
+body .card{
+    background-color: transparent;
+    border: 0px;
+}
+
+@media (min-width: 768px) {
+    .movie-container .movie-title {
+        width: 423px; 
+     }
+     
+     .movie-container .movie-description {
+        width: 423px; 
+         
+     }
 }
