@@ -1,12 +1,11 @@
 import { API_KEY, IMG_URL } from "./api.js";
 
-const loadMovie = async (isTV) => {
+const loadMovie = async (isTV, page) => {
   try {
-    const [movieResult, categorieId] = await getMovieResults(isTV);
+    const [movieResult, categorieId] = await getMovieResults(isTV, page);
     const { title, name, overview, poster_path, id } = movieResult;
     const imgSrc = IMG_URL + poster_path;
-    const { logo_path, provider_name } = await getMovieProviders(id, isTV);
-
+    const { logo_path, provider_name } = await getMovieProviders(id, isTV); 
     clearMovie();
 
     document.querySelector(".movie-img").innerHTML = `<img src='${imgSrc}' />`;
@@ -16,12 +15,13 @@ const loadMovie = async (isTV) => {
     document.querySelector(".movie-provider").innerHTML = `<p class='text-n'>${provider_name}</p>`;
   } catch (error) {
     clearMovie();
+    console.log(getMovieResults);
     document.querySelector(".movie-title").innerHTML = "<h2>Nenhum filme encontrado, tente novamente.</h2>";
   }
 };
 
-const getMovieResults = async (isTV) => {
-  const response = await fetch(`https://api.themoviedb.org/3/discover/${isTV ? "tv" : "movie"}${API_KEY}&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${getRandomInt(500) + 1}&watch_region=BR&with_watch_monetization_types=flatrate`, {
+const getMovieResults = async (isTV, page) => {
+  const response = await fetch(`https://api.themoviedb.org/3/discover/${isTV ? "tv" : "movie"}${API_KEY}&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&watch_region=BR&with_watch_monetization_types=flatrate`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -70,7 +70,8 @@ document.querySelector('.onoffbtn').addEventListener('click', function () {
 
 document.querySelector(".button-container").addEventListener("click", function () {
   const isTV = document.querySelector(".onoffbtn").classList.contains("active");
-  loadMovie(isTV);
+  const page = isTV ? getRandomInt(378) + 1 : getRandomInt(499) + 1;
+  loadMovie(isTV, page);
 });
 
 const onoffbtn = document.querySelector('.onoffbtn');
