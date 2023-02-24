@@ -1,4 +1,4 @@
-const API_URL = 'https://back-dos-filmes.herokuapp.com:42956'; 
+const API_URL = 'https://back-dos-filmes.onrender.com/'; 
 const IMG_URL = 'https://image.tmdb.org/t/p/original';
 const API_KEY = 'ce20ac06fb3262b6ef00dd5c451648f1';
 
