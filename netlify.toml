@@ -1,0 +1,12 @@
+[build]
+  command = "cd frontend"
+  publish = "frontend"
+[[redirects]]
+  from = "/api/*"
+  to = "http://localhost:3000/api/:splat"
+[[redirects]]
+  from = "/*"
+  to = "/frontend/:splat"
+
+[dev]
+  command = "concurrently --kill-others-on-fail \"npm run start\""
