@@ -1,4 +1,3 @@
 [build]
-  base = "./frontend"
-  publish = "./backend"
-  command = "npm start"
+  base = "/frontend"
+  publish = "/backend"
