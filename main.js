@@ -1,4 +1,4 @@
-const API_URL = 'https://nodejs-serverless-function-express-git-main-m3rcx.vercel.app/'; 
+const API_URL = 'https://nodejs-serverless-function-express-git-main-m3rcx.vercel.app'; 
 const IMG_URL = 'https://image.tmdb.org/t/p/original';
 const API_KEY = 'ce20ac06fb3262b6ef00dd5c451648f1';
 
